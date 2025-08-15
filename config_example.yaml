@@ -1,0 +1,8 @@
+api_key: "your_yandex_api_key"
+input_file: "routes.csv"
+output_dir: "output"
+template_file: "template.html"
+keep_html: false
+viewport:
+  width: 800
+  height: 600

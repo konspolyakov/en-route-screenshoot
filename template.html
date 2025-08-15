@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    html, body, #map {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #custom-copyright {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 12px;
+      color: #555;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-family: sans-serif;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Скрытие лишних элементов */
+    .ymaps-2-1-79-copyright,
+    .ymaps-2-1-79-transport-pin {
+      display: none !important;
+    }
+  </style>
+  <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=__API_KEY__"></script>
+</head>
+<body>
+<div id="map"></div>
+<div id="custom-copyright">© 2025 konspolyakov / Encounter</div>
+<script>
+  ymaps.ready(init);
+  function init() {
+    const myMap = new ymaps.Map('map', {
+      center: [__CENTER__],
+      zoom: 16,
+      controls: []
+    }, {
+      suppressMapOpenBlock: true,
+      suppressObsoleteBrowserNotifier: true
+    });
+
+    const multiRoute = new ymaps.multiRouter.MultiRoute({
+      referencePoints: [[__FROM__], [__TO__]],
+      params: {
+        routingMode: 'pedestrian',
+        results: 1
+      }
+    }, {
+      boundsAutoApply: true,
+      zoomMargin: 32,
+      wayPointStartVisible: false,
+      wayPointFinishVisible: false
+    });
+
+    myMap.geoObjects.add(multiRoute);
+
+    const placemarkStart = new ymaps.Placemark([__FROM__], {
+      iconContent: "Отсюда"
+    }, {
+        preset: 'islands#blueStretchyIcon'
+    });
+    const placemarkEnd = new ymaps.Placemark([__TO__], {
+      iconContent: "Сюда"
+    }, {
+      preset: 'islands#redStretchyIcon'
+    });
+    myMap.geoObjects.add(placemarkStart);
+    myMap.geoObjects.add(placemarkEnd);
+  };
+</script>
+</body>
+</html>
